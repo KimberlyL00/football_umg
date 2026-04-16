@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EquipoDAO {
 
-    // CREATE - Insertar equipo
+    // CREATE Insertar equipo
     public void insertar(Equipo equipo) {
         String sql = "INSERT INTO equipos (nombre, pais, grupo) VALUES (?, ?, ?)";
         try (Connection conn = ConexionDB.conectar();
@@ -25,7 +25,7 @@ public class EquipoDAO {
         }
     }
 
-    // READ - Obtener todos los equipos
+    // READ  Obtener todos los equipos
     public List<Equipo> obtenerTodos() {
         List<Equipo> lista = new ArrayList<>();
         String sql = "SELECT * FROM equipos";
@@ -48,7 +48,7 @@ public class EquipoDAO {
         return lista;
     }
 
-    // UPDATE - Actualizar equipo
+    // UPDATE Actualizar equipo
     public void actualizar(Equipo equipo) {
         String sql = "UPDATE equipos SET nombre=?, pais=?, grupo=? WHERE id=?";
         try (Connection conn = ConexionDB.conectar();
@@ -65,7 +65,7 @@ public class EquipoDAO {
         }
     }
 
-    // DELETE - Eliminar equipo
+    //  Eliminar equipo
     public void eliminar(int id) {
         String sql = "DELETE FROM equipos WHERE id=?";
         try (Connection conn = ConexionDB.conectar();

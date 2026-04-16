@@ -27,7 +27,7 @@ public class PartidoDAO {
         }
     }
 
-    // READ - todos
+    // READ todos
     public List<Partido> obtenerTodos() {
         List<Partido> lista = new ArrayList<>();
         String sql = "SELECT * FROM partido";
@@ -54,7 +54,7 @@ public class PartidoDAO {
         return lista;
     }
 
-    // READ - por fase
+    // READ por fase
     public List<Partido> obtenerPorFase(String fase) {
         List<Partido> lista = new ArrayList<>();
         String sql = "SELECT * FROM partido WHERE fase = ?";
