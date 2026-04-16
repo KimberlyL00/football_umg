@@ -5,16 +5,18 @@ public class Equipo {
     private int id;
     private String nombre;
     private String pais;
-
+    private String Grupo;
+    
     // 2. Constructor Vacío
     public Equipo() {
     }
 
     // 3. Constructor con Parámetros 
-    public Equipo(int id, String nombre, String pais) {
+    public Equipo(int id, String nombre, String pais, String Grupo) {
         this.id = id;
         this.nombre = nombre;
         this.pais = pais;
+        this.Grupo = Grupo;
     }
 
     // 4. Getters y Setters
@@ -26,4 +28,7 @@ public class Equipo {
 
     public String getPais() { return pais; }
     public void setPais(String pais) { this.pais = pais; }
+    
+    public String getGrupo() { return Grupo; }
+    public void setGrupo(String Grupo) { this.Grupo = Grupo; }
 }

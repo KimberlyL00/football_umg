@@ -2,7 +2,7 @@ package modelos;
 import java.util.Date;
 
 public class Partido {
-    // 1. ATRIBUTOS (Siempre mejor arriba)
+    // 1. ATRIBUTOS 
     private int id;
     private int id_equipo_local;
     private int id_equipo_visitante;
@@ -13,7 +13,7 @@ public class Partido {
     private Date fecha;
 // CONSTRUCTOR vacio
      public Partido(){}
-    // 2. CONSTRUCTORES
+
     // Constructor completo
     public Partido(int id, int id_equipo_local, int id_equipo_visitante, int id_estadio, int goles_local, int goles_visitante, String fase, Date fecha) {
         this.id = id;
