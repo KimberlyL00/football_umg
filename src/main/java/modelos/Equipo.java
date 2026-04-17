@@ -1,29 +1,31 @@
 package modelos;
 
 public class Equipo {
-    // 1. Atributos 
     private int id;
     private String nombre;
     private String pais;
+    private String grupo; // Nuevo campo según tu SQL
+    private String entrenador; // Nuevo campo según tu SQL
 
-    // 2. Constructor Vacío
-    public Equipo() {
-    }
+    public Equipo() {}
 
-    // 3. Constructor con Parámetros 
-    public Equipo(int id, String nombre, String pais) {
+    public Equipo(int id, String nombre, String pais, String grupo, String entrenador) {
         this.id = id;
         this.nombre = nombre;
         this.pais = pais;
+        this.grupo = grupo;
+        this.entrenador = entrenador;
     }
 
-    // 4. Getters y Setters
+    // Getters y Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
-
     public String getPais() { return pais; }
     public void setPais(String pais) { this.pais = pais; }
+    public String getGrupo() { return grupo; }
+    public void setGrupo(String grupo) { this.grupo = grupo; }
+    public String getEntrenador() { return entrenador; }
+    public void setEntrenador(String entrenador) { this.entrenador = entrenador; }
 }
