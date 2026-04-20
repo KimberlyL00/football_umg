@@ -12,7 +12,7 @@ public class Partido {
     private Date fecha;
 
     public Partido() {}
-    // Getters y Setters (Asegúrate de que los nombres coincidan con el DAO)
+    // Getters y Setters 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getId_equipo_local() { return id_equipo_local; }

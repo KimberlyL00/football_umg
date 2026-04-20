@@ -5,7 +5,7 @@
     String rutaE = "C:\\Users\\leiva\\Desktop\\Universidad\\proyecto\\evento.txt";
     String accionE = request.getParameter("accion");
 
-    // --- LÓGICA PARA AGREGAR EVENTO ---
+    //  LÓGICA PARA AGREGAR EVENTO 
     if ("agregar".equals(accionE)) {
         String nuevoEv = request.getParameter("id") + "," + 
                          request.getParameter("id_partido") + "," + 
@@ -28,14 +28,14 @@
         try (BufferedReader br = new BufferedReader(new FileReader(rutaE))) {
             String l;
             while ((l = br.readLine()) != null) {
-                // Si la línea no empieza con el ID que queremos borrar, la guardamos
+               
                 if (!l.startsWith(idDel + ",")) {
                     listaE.add(l);
                 }
             }
         } catch (IOException e) { e.printStackTrace(); }
 
-        // Sobreescribimos el archivo con la lista filtrada
+        
         try (PrintWriter pw = new PrintWriter(new FileWriter(rutaE))) {
             for (String s : listaE) {
                 pw.println(s);
@@ -65,7 +65,7 @@
 <body>
 
 <div class="container">
-    <h1>📢 Registro de Eventos en Vivo</h1>
+    <h1>Registro de Eventos en Vivo</h1>
 
     <div class="form-box">
         <h3>Registrar Nuevo Suceso</h3>

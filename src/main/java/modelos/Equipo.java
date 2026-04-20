@@ -4,8 +4,8 @@ public class Equipo {
     private int id;
     private String nombre;
     private String pais;
-    private String grupo; // Nuevo campo según tu SQL
-    private String entrenador; // Nuevo campo según tu SQL
+    private String grupo; // Nuevo campo 
+    private String entrenador; // Nuevo campo
 
     public Equipo() {}
 

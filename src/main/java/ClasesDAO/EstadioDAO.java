@@ -1,6 +1,6 @@
 package ClasesDAO;
 
-import modelos.Estadio; // Asegúrate de tener el modelo Estadio creado
+import modelos.Estadio; 
 import conexion.ConexionDB;
 import java.sql.*;
 import java.util.ArrayList;

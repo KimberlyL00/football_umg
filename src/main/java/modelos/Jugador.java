@@ -9,7 +9,7 @@ public class Jugador {
     private int numero_playera;
     private boolean jugador_activo;
 
-    // 2. Constructor Vacío (¡Indispensable!)
+    // 2. Constructor Vacío 
     public Jugador() {
     }
 
