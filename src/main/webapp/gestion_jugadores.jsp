@@ -1,70 +1,84 @@
-<%@page import="java.util.List"%>
-<%@page import="modelos.Jugador"%>
-<%@page import="ClasesDAO.JugadorDAO"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="conexion.ConexionDB"%>
+<%@page import="java.sql.*"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    request.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
+%>
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Gestión de Jugadores</title>
+    <meta charset="UTF-8">
+    <title>Plantillas | Mundial 2026</title>
     <style>
-        body { font-family: Arial; margin: 40px; background: #f4f4f4; }
-        .form-container { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { padding: 10px; border: 1px solid #ddd; }
-        th { background: #28a745; color: white; }
-        .btn-save { background: #28a745; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px; }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: white; padding: 20px; }
+        .card { background: #1e293b; padding: 40px; border-radius: 20px; max-width: 1000px; margin: auto; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+        h1 { color: #38bdf8; text-align: center; font-size: 2.5em; border-bottom: 2px solid #334155; padding-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-add { background: #22c55e; color: white; padding: 14px 24px; text-decoration: none; border-radius: 10px; display: inline-block; font-weight: bold; margin-bottom: 30px; transition: 0.3s; }
+        .btn-add:hover { background: #16a34a; transform: translateY(-2px); }
+        table { width: 100%; border-collapse: collapse; background: rgba(15, 23, 42, 0.5); border-radius: 12px; overflow: hidden; }
+        th { background: #072357; color: #38bdf8; padding: 18px; text-transform: uppercase; font-size: 0.9em; border-bottom: 2px solid #1e293b; }
+        td { padding: 16px; border-bottom: 1px solid #334155; text-align: center; font-size: 1.05em; }
+        .btn-delete { color: #ef4444; text-decoration: none; font-weight: bold; padding: 5px 10px; border: 1px solid #ef4444; border-radius: 5px; transition: 0.2s; }
+        .btn-delete:hover { background: #ef4444; color: white; }
+        .error-msg { background: rgba(239, 68, 68, 0.15); color: #f87171; padding: 20px; border-radius: 10px; border: 1px solid #ef4444; text-align: center; font-weight: 500; }
     </style>
 </head>
 <body>
-    <h1>Gestión de Jugadores</h1>
+    <div class="card">
+        <h1>PLANTILLAS DE JUGADORES</h1>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="agregar_jugador.jsp" class="btn-add">+ REGISTRAR JUGADOR</a>
+            <a href="menu.jsp" style="color: #94a3b8; text-decoration: none; font-weight: 500;">← VOLVER AL MENÚ</a>
+        </div>
 
-    <div class="form-container">
-        <form action="gestion_jugadores.jsp" method="POST">
-            <input type="number" name="id_equipo" placeholder="ID Equipo" required>
-            <input type="text" name="nombre" placeholder="Nombre Jugador" required>
-            <input type="text" name="posicion" placeholder="Posición">
-            <input type="number" name="numero" placeholder="No. Camisola">
-            <button type="submit" name="accion" value="guardar" class="btn-save">Guardar Jugador</button>
-        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>NOMBRE</th>
+                    <th>POSICIÓN</th>
+                    <th>EQUIPO</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    Connection conn = null;
+                    try {
+                        conn = ConexionDB.conectar();
+                        if (conn == null) throw new Exception("Error de conexion");
+                        
+                        Statement st = conn.createStatement();
+                        String sql = "SELECT j.id, j.nombre, j.posicion, e.nombre as equipo " +
+                                     "FROM jugadores j " +
+                                     "LEFT JOIN equipos e ON j.id_equipo = e.id ORDER BY j.nombre ASC";
+                        
+                        ResultSet rs = st.executeQuery(sql);
+                        while(rs.next()){
+                %>
+                <tr>
+                    <td style="color: #f1f5f9; font-weight: 500;"><%= rs.getString("nombre") %></td>
+                    <td style="color: #94a3b8;"><%= rs.getString("posicion") %></td>
+                    <td style="color: #d4af37; font-weight: bold;"><%= rs.getString("equipo") %></td>
+                    <td>
+                        <a href="eliminar_jugador.jsp?id=<%= rs.getInt("id") %>" class="btn-delete" onclick="return confirm('¿Eliminar permanentemente?')">Eliminar</a>
+                    </td>
+                </tr>
+                <% 
+                        } 
+                    } catch(Exception e){ 
+                %>
+                <tr>
+                    <td colspan="4">
+                        <div class="error-msg">
+                            ERROR DE ACCESO: Credenciales incorrectas o Base de Datos desconectada. [<%= e.getMessage() %>]
+                        </div>
+                    </td>
+                </tr>
+                <% } finally { if(conn != null) conn.close(); } %>
+            </tbody>
+        </table>
     </div>
-
-    <%
-        JugadorDAO dao = new JugadorDAO();
-        String accion = request.getParameter("accion");
-        if (accion != null) {
-            if (accion.equals("guardar")) {
-                Jugador j = new Jugador();
-                j.setId_equipo(Integer.parseInt(request.getParameter("id_equipo")));
-                j.setNombre(request.getParameter("nombre"));
-                j.setPosicion(request.getParameter("posicion"));
-                j.setNumero_playera(Integer.parseInt(request.getParameter("numero")));
-                j.setJugador_activo(true);
-                dao.insertar(j);
-            } else if (accion.equals("eliminar")) {
-                dao.eliminar(Integer.parseInt(request.getParameter("id")));
-            }
-        }
-        List<Jugador> lista = dao.obtenerTodos();
-    %>
-
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Equipo</th>
-            <th>Nombre</th>
-            <th>Acciones</th>
-        </tr>
-        <% for (Jugador j : lista) { %>
-        <tr>
-            <td><%= j.getId() %></td>
-            <td><%= j.getId_equipo() %></td>
-            <td><%= j.getNombre() %></td>
-            <td>
-                <a href="gestion_jugadores.jsp?accion=eliminar&id=<%= j.getId() %>" onclick="return confirm('¿Eliminar?')">Eliminar</a>
-            </td>
-        </tr>
-        <% } %>
-    </table>
-    <br><a href="index.jsp">Volver al Menú</a>
 </body>
 </html>

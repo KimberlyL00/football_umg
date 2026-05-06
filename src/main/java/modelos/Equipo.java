@@ -1,31 +1,26 @@
 package modelos;
 
 public class Equipo {
-    private int id;
-    private String nombre;
-    private String pais;
-    private String grupo; // Nuevo campo 
-    private String entrenador; // Nuevo campo
+    private int id_equipo;
+    private String nombre_equipo;
+    private int id_pais;
+    private char grupo;
 
     public Equipo() {}
 
-    public Equipo(int id, String nombre, String pais, String grupo, String entrenador) {
-        this.id = id;
-        this.nombre = nombre;
-        this.pais = pais;
+    public Equipo(int id_equipo, String nombre_equipo, int id_pais, char grupo) {
+        this.id_equipo = id_equipo;
+        this.nombre_equipo = nombre_equipo;
+        this.id_pais = id_pais;
         this.grupo = grupo;
-        this.entrenador = entrenador;
     }
 
-    // Getters y Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    public String getPais() { return pais; }
-    public void setPais(String pais) { this.pais = pais; }
-    public String getGrupo() { return grupo; }
-    public void setGrupo(String grupo) { this.grupo = grupo; }
-    public String getEntrenador() { return entrenador; }
-    public void setEntrenador(String entrenador) { this.entrenador = entrenador; }
+    public int getId_equipo() { return id_equipo; }
+    public void setId_equipo(int id_equipo) { this.id_equipo = id_equipo; }
+    public String getNombre_equipo() { return nombre_equipo; }
+    public void setNombre_equipo(String nombre_equipo) { this.nombre_equipo = nombre_equipo; }
+    public int getId_pais() { return id_pais; }
+    public void setId_pais(int id_pais) { this.id_pais = id_pais; }
+    public char getGrupo() { return grupo; }
+    public void setGrupo(char grupo) { this.grupo = grupo; }
 }

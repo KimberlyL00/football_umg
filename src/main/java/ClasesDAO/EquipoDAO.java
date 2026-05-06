@@ -10,44 +10,70 @@ public class EquipoDAO {
 
     public List<Equipo> obtenerTodos() {
         List<Equipo> lista = new ArrayList<>();
-        String sql = "SELECT id, nombre, pais, grupo, entrenador FROM equipo ORDER BY id";
+        String sql = "SELECT id_equipo, nombre_equipo, id_pais, grupo FROM equipo";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                Equipo e = new Equipo(rs.getInt("id"), rs.getString("nombre"), 
-                                     rs.getString("pais"), rs.getString("grupo"), 
-                                     rs.getString("entrenador"));
+                Equipo e = new Equipo();
+                e.setId_equipo(rs.getInt("id_equipo"));
+                e.setNombre_equipo(rs.getString("nombre_equipo"));
+                e.setId_pais(rs.getInt("id_pais"));
+                e.setGrupo(rs.getString("grupo").charAt(0));
                 lista.add(e);
             }
-        } catch (SQLException e) {
-            System.out.println("Error al listar equipos: " + e.getMessage());
+        } catch (SQLException ex) {
+            System.out.println("Error al listar equipos: " + ex.getMessage());
         }
         return lista;
     }
 
-    public void insertar(Equipo equipo) {
-        String sql = "INSERT INTO equipo (nombre, pais, grupo, entrenador) VALUES (?, ?, ?, ?)";
+    public void insertar(Equipo e) {
+        String sql = "INSERT INTO equipo (nombre_equipo, id_pais, grupo) VALUES (?, ?, ?)";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, equipo.getNombre());
-            ps.setString(2, equipo.getPais());
-            ps.setString(3, equipo.getGrupo());
-            ps.setString(4, equipo.getEntrenador());
+
+            ps.setString(1, e.getNombre_equipo());
+            ps.setInt(2, e.getId_pais());
+            ps.setString(3, String.valueOf(e.getGrupo()));
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error al insertar equipo: " + e.getMessage());
+
+        } catch (SQLException ex) {
+            System.out.println("Error al insertar equipo: " + ex.getMessage());
         }
     }
 
-    public void eliminar(int id) {
-        String sql = "DELETE FROM equipo WHERE id = ?";
+    public void actualizar(Equipo e) {
+        String sql = "UPDATE equipo SET nombre_equipo = ?, id_pais = ?, grupo = ? WHERE id_equipo = ?";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+
+            ps.setString(1, e.getNombre_equipo());
+            ps.setInt(2, e.getId_pais());
+            ps.setString(3, String.valueOf(e.getGrupo()));
+            ps.setInt(4, e.getId_equipo());
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar equipo: " + e.getMessage());
+
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar equipo: " + ex.getMessage());
+        }
+    }
+
+    public void eliminar(int id_equipo) {
+        String sql = "DELETE FROM equipo WHERE id_equipo = ?";
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id_equipo);
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("Error al eliminar equipo: " + ex.getMessage());
         }
     }
 }

@@ -10,49 +10,73 @@ public class JugadorDAO {
 
     public List<Jugador> obtenerTodos() {
         List<Jugador> lista = new ArrayList<>();
-        String sql = "SELECT id, id_equipo, nombre, posicion, numero_playera, jugador_activo FROM jugador ORDER BY id";
+        String sql = "SELECT id_jugador, nombre_completo, numero_camiseta, id_equipo, id_posicion FROM jugador";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 Jugador j = new Jugador();
-                j.setId(rs.getInt("id"));
+                j.setId_jugador(rs.getInt("id_jugador"));
+                j.setNombre_completo(rs.getString("nombre_completo"));
+                j.setNumero_camiseta(rs.getInt("numero_camiseta"));
                 j.setId_equipo(rs.getInt("id_equipo"));
-                j.setNombre(rs.getString("nombre"));
-                j.setPosicion(rs.getString("posicion"));
-                j.setNumero_playera(rs.getInt("numero_playera"));
-                j.setJugador_activo(rs.getBoolean("jugador_activo"));
+                j.setId_posicion(rs.getInt("id_posicion"));
                 lista.add(j);
             }
-        } catch (SQLException e) {
-            System.out.println("Error al listar jugadores: " + e.getMessage());
+        } catch (SQLException ex) {
+            System.out.println("Error al listar jugadores: " + ex.getMessage());
         }
         return lista;
     }
 
-    public void insertar(Jugador jugador) {
-        String sql = "INSERT INTO jugador (id_equipo, nombre, posicion, numero_playera, jugador_activo) VALUES (?, ?, ?, ?, ?)";
+    public void insertar(Jugador j) {
+        String sql = "INSERT INTO jugador (nombre_completo, numero_camiseta, id_equipo, id_posicion) VALUES (?, ?, ?, ?)";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, jugador.getId_equipo());
-            ps.setString(2, jugador.getNombre());
-            ps.setString(3, jugador.getPosicion());
-            ps.setInt(4, jugador.getNumero_playera());
-            ps.setBoolean(5, jugador.isJugador_activo());
+
+            ps.setString(1, j.getNombre_completo());
+            ps.setInt(2, j.getNumero_camiseta());
+            ps.setInt(3, j.getId_equipo());
+            ps.setInt(4, j.getId_posicion());
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error al insertar jugador: " + e.getMessage());
+
+        } catch (SQLException ex) {
+            System.out.println("Error al insertar jugador: " + ex.getMessage());
         }
     }
 
-    public void eliminar(int id) {
-        String sql = "DELETE FROM jugador WHERE id = ?";
+    public void actualizar(Jugador j) {
+        String sql = "UPDATE jugador SET nombre_completo = ?, numero_camiseta = ?, id_equipo = ?, id_posicion = ? WHERE id_jugador = ?";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+
+            ps.setString(1, j.getNombre_completo());
+            ps.setInt(2, j.getNumero_camiseta());
+            ps.setInt(3, j.getId_equipo());
+            ps.setInt(4, j.getId_posicion());
+            ps.setInt(5, j.getId_jugador());
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar jugador: " + e.getMessage());
+
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar jugador: " + ex.getMessage());
+        }
+    }
+
+    public void eliminar(int id_jugador) {
+        String sql = "DELETE FROM jugador WHERE id_jugador = ?";
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id_jugador);
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("Error al eliminar jugador: " + ex.getMessage());
         }
     }
 }

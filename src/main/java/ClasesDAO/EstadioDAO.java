@@ -1,6 +1,6 @@
 package ClasesDAO;
 
-import modelos.Estadio; 
+import modelos.Estadio;
 import conexion.ConexionDB;
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,47 +10,67 @@ public class EstadioDAO {
 
     public List<Estadio> obtenerTodos() {
         List<Estadio> lista = new ArrayList<>();
-        String sql = "SELECT id, nombre, ciudad, pais, capacidad FROM estadio ORDER BY id";
+        String sql = "SELECT id_estadio, nombre, ciudad FROM estadio";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                Estadio est = new Estadio();
-                est.setId(rs.getInt("id"));
-                est.setNombre(rs.getString("nombre"));
-                est.setCiudad(rs.getString("ciudad"));
-                est.setPais(rs.getString("pais"));
-                est.setCapacidad(rs.getInt("capacidad"));
-                lista.add(est);
+                Estadio e = new Estadio();
+                e.setId_estadio(rs.getInt("id_estadio"));
+                e.setNombre(rs.getString("nombre"));
+                e.setCiudad(rs.getString("ciudad"));
+                lista.add(e);
             }
-        } catch (SQLException e) {
-            System.out.println("Error al listar estadios: " + e.getMessage());
+        } catch (SQLException ex) {
+            System.out.println("Error al listar estadios: " + ex.getMessage());
         }
         return lista;
     }
 
-    public void insertar(Estadio estadio) {
-        String sql = "INSERT INTO estadio (nombre, ciudad, pais, capacidad) VALUES (?, ?, ?, ?)";
+    public void insertar(Estadio e) {
+        String sql = "INSERT INTO estadio (nombre, ciudad) VALUES (?, ?)";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, estadio.getNombre());
-            ps.setString(2, estadio.getCiudad());
-            ps.setString(3, estadio.getPais());
-            ps.setInt(4, estadio.getCapacidad());
+
+            ps.setString(1, e.getNombre());
+            ps.setString(2, e.getCiudad());
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error al insertar estadio: " + e.getMessage());
+
+        } catch (SQLException ex) {
+            System.out.println("Error al insertar estadio: " + ex.getMessage());
         }
     }
 
-    public void eliminar(int id) {
-        String sql = "DELETE FROM estadio WHERE id = ?";
+    public void actualizar(Estadio e) {
+        String sql = "UPDATE estadio SET nombre = ?, ciudad = ? WHERE id_estadio = ?";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+
+            ps.setString(1, e.getNombre());
+            ps.setString(2, e.getCiudad());
+            ps.setInt(3, e.getId_estadio());
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar estadio: " + e.getMessage());
+
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar estadio: " + ex.getMessage());
+        }
+    }
+
+    public void eliminar(int id_estadio) {
+        String sql = "DELETE FROM estadio WHERE id_estadio = ?";
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id_estadio);
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("Error al eliminar estadio: " + ex.getMessage());
         }
     }
 }
