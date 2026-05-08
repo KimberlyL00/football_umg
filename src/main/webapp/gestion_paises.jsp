@@ -9,11 +9,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Estadios | Mundial 2026</title>
+    <title>Paises | Mundial 2026</title>
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --red: #ef4444; --green: #22c55e; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; padding: 40px; margin: 0; }
-        .container { max-width: 900px; margin: auto; background: var(--card); padding: 30px; border-radius: 20px; }
+        .container { max-width: 800px; margin: auto; background: var(--card); padding: 30px; border-radius: 20px; }
         h1 { text-align: center; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #334155; padding-bottom: 15px; }
         .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .btn-add { background: var(--green); color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; }
@@ -26,9 +26,9 @@
 </head>
 <body>
 <div class="container">
-    <h1>Estadios</h1>
+    <h1>Paises</h1>
     <div class="nav-bar">
-        <a href="agregar_estadio.jsp" class="btn-add">+ Agregar Estadio</a>
+        <a href="agregar_pais.jsp" class="btn-add">+ Agregar Pais</a>
         <a href="menu.jsp" style="color: #94a3b8; text-decoration: none;">← Volver al Menu</a>
     </div>
     <table>
@@ -36,7 +36,6 @@
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Ciudad</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -45,17 +44,16 @@
                 Connection conn = null;
                 try {
                     conn = ConexionDB.conectar();
-                    PreparedStatement ps = conn.prepareStatement("SELECT id_estadio, nombre, ciudad FROM estadio ORDER BY nombre ASC");
+                    PreparedStatement ps = conn.prepareStatement("SELECT id_pais, nombre FROM pais ORDER BY nombre ASC");
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
             %>
             <tr>
-                <td style="color: var(--accent);">#<%= rs.getInt("id_estadio") %></td>
+                <td style="color: var(--accent);">#<%= rs.getInt("id_pais") %></td>
                 <td><%= rs.getString("nombre") %></td>
-                <td style="color: #94a3b8;"><%= rs.getString("ciudad") %></td>
                 <td>
-                    <a href="eliminar_estadio.jsp?id=<%= rs.getInt("id_estadio") %>" class="btn-del"
-                       onclick="return confirm('¿Eliminar este estadio?')">Eliminar</a>
+                    <a href="eliminar_pais.jsp?id=<%= rs.getInt("id_pais") %>" class="btn-del"
+                       onclick="return confirm('¿Eliminar este pais?')">Eliminar</a>
                 </td>
             </tr>
             <%
@@ -63,8 +61,8 @@
                 } catch (Exception e) {
             %>
             <tr>
-                <td colspan="4">
-                    <div class="error-msg">Error al cargar estadios: <%= e.getMessage() %></div>
+                <td colspan="3">
+                    <div class="error-msg">Error al cargar paises: <%= e.getMessage() %></div>
                 </td>
             </tr>
             <% } finally { if (conn != null) conn.close(); } %>

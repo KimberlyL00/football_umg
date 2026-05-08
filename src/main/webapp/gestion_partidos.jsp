@@ -9,92 +9,88 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calendario | Mundial 2026</title>
+    <title>Partidos | Mundial 2026</title>
     <style>
-        body { font-family: 'Inter', sans-serif; background: #0f172a; color: white; padding: 20px; }
-        .card { background: #1e293b; padding: 35px; border-radius: 20px; max-width: 1100px; margin: auto; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
-        h1 { color: #38bdf8; text-align: center; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #334155; padding-bottom: 15px; }
-        .btn-new { background: #22c55e; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin-bottom: 25px; }
-        table { width: 100%; border-collapse: collapse; background: rgba(15, 23, 42, 0.5); }
-        th { background: #072357; color: #38bdf8; padding: 15px; font-size: 0.85em; text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid #334155; text-align: center; }
-        .status { padding: 5px 10px; border-radius: 15px; font-size: 0.8em; font-weight: bold; }
-        .pendiente { background: #f59e0b; color: #000; }
-        .finalizado { background: #10b981; color: #fff; }
-        .error-msg { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 20px; border-radius: 10px; text-align: center; }
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --red: #ef4444; --green: #22c55e; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; padding: 40px; margin: 0; }
+        .container { max-width: 1200px; margin: auto; background: var(--card); padding: 30px; border-radius: 20px; }
+        h1 { text-align: center; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #334155; padding-bottom: 15px; }
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .btn-add { background: var(--green); color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #072357; color: var(--accent); padding: 14px; text-transform: uppercase; font-size: 0.85em; }
+        td { padding: 14px; border-bottom: 1px solid #334155; text-align: center; }
+        .btn-del { color: var(--red); text-decoration: none; border: 1px solid var(--red); padding: 5px 12px; border-radius: 6px; font-weight: bold; }
+        .error-msg { background: rgba(239,68,68,0.1); border: 1px solid var(--red); color: #fca5a5; padding: 20px; border-radius: 10px; text-align: center; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Calendario de Encuentros</h1>
-        
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="programar_partido.jsp" class="btn-new">+ PROGRAMAR NUEVO ENCUENTRO</a>
-            <a href="menu.jsp" style="color: #94a3b8; text-decoration: none;">← Volver al Menú</a>
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Encuentro</th>
-                    <th>Marcador</th>
-                    <th>Estadio</th>
-                    <th>Fase</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%
-                    Connection conn = null;
-                    try {
-                        conn = ConexionDB.conectar();
-                        if (conn == null) throw new Exception("Error: Contraseña de DB incorrecta.");
-                        
-                        Statement st = conn.createStatement();
-                        // Consulta con JOIN para ver los nombres de los equipos y estadios
-                        String sql = "SELECT e.id, el.nombre as local, ev.nombre as visitante, " +
-                                     "e.marcador_local, e.marcador_visitante, est.nombre as estadio, " +
-                                     "e.fase, e.estado FROM encuentros e " +
-                                     "JOIN equipos el ON e.id_equipo_local = el.id " +
-                                     "JOIN equipos ev ON e.id_equipo_visitante = ev.id " +
-                                     "JOIN estadios est ON e.id_estadio = est.id ORDER BY e.id ASC";
-                        
-                        ResultSet rs = st.executeQuery(sql);
-                        while(rs.next()){
-                            String estado = rs.getString("estado");
-                            String claseEstado = estado.equalsIgnoreCase("PENDIENTE") ? "pendiente" : "finalizado";
-                %>
-                <tr>
-                    <td>#<%= rs.getInt("id") %></td>
-                    <td style="font-weight: bold;"><%= rs.getString("local") %> vs <%= rs.getString("visitante") %></td>
-                    <td style="color: #38bdf8; font-family: monospace; font-size: 1.2em;">
-                        <%= rs.getInt("marcador_local") %> - <%= rs.getInt("marcador_visitante") %>
-                    </td>
-                    <td style="color: #94a3b8;"><%= rs.getString("estadio") %></td>
-                    <td><%= rs.getString("fase") %></td>
-                    <td><span class="status <%= claseEstado %>"><%= estado %></span></td>
-                    <td>
-                        <a href="eliminar_partido.jsp?id=<%= rs.getInt("id") %>" 
-                           style="color: #ef4444; text-decoration: none; font-size: 0.9em;"
-                           onclick="return confirm('¿Eliminar este encuentro?')">Eliminar</a>
-                    </td>
-                </tr>
-                <% 
-                        } 
-                    } catch(Exception e){ 
-                %>
-                <tr>
-                    <td colspan="7">
-                        <div class="error-msg">
-                            <strong>ERROR DE CONEXIÓN:</strong> Verifica que la contraseña en tu clase Java coincida con la de pgAdmin.
-                        </div>
-                    </td>
-                </tr>
-                <% } finally { if(conn != null) conn.close(); } %>
-            </tbody>
-        </table>
+<div class="container">
+    <h1>Partidos</h1>
+    <div class="nav-bar">
+        <a href="agregar_partido.jsp" class="btn-add">+ Agregar Partido</a>
+        <a href="menu.jsp" style="color: #94a3b8; text-decoration: none;">← Volver al Menu</a>
     </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha y Hora</th>
+                <th>Local</th>
+                <th>Visitante</th>
+                <th>Marcador</th>
+                <th>Estadio</th>
+                <th>Fase</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                Connection conn = null;
+                try {
+                    conn = ConexionDB.conectar();
+                    PreparedStatement ps = conn.prepareStatement(
+                        "SELECT p.id_partido, p.fecha_hora, " +
+                        "el.nombre_equipo as local, ev.nombre_equipo as visitante, " +
+                        "p.goles_local, p.goles_visitante, " +
+                        "est.nombre as estadio, f.descripcion as fase " +
+                        "FROM partido p " +
+                        "JOIN equipo el ON p.id_equipo_local = el.id_equipo " +
+                        "JOIN equipo ev ON p.id_equipo_visitante = ev.id_equipo " +
+                        "JOIN estadio est ON p.id_estadio = est.id_estadio " +
+                        "JOIN fase f ON p.id_fase = f.id_fase " +
+                        "ORDER BY p.fecha_hora ASC"
+                    );
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+            %>
+            <tr>
+                <td style="color: var(--accent);">#<%= rs.getInt("id_partido") %></td>
+                <td style="color: #94a3b8;"><%= rs.getTimestamp("fecha_hora") %></td>
+                <td style="font-weight: bold;"><%= rs.getString("local") %></td>
+                <td style="font-weight: bold;"><%= rs.getString("visitante") %></td>
+                <td style="color: var(--accent); font-family: monospace; font-size: 1.2em;">
+                    <%= rs.getInt("goles_local") %> - <%= rs.getInt("goles_visitante") %>
+                </td>
+                <td style="color: #94a3b8;"><%= rs.getString("estadio") %></td>
+                <td><%= rs.getString("fase") %></td>
+                <td>
+                    <a href="eliminar_partido.jsp?id=<%= rs.getInt("id_partido") %>" class="btn-del"
+                       onclick="return confirm('¿Eliminar este partido?')">Eliminar</a>
+                </td>
+            </tr>
+            <%
+                    }
+                } catch (Exception e) {
+            %>
+            <tr>
+                <td colspan="8">
+                    <div class="error-msg">Error al cargar partidos: <%= e.getMessage() %></div>
+                </td>
+            </tr>
+            <% } finally { if (conn != null) conn.close(); } %>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

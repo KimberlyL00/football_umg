@@ -1,14 +1,9 @@
-<%@page import="conexion.ConexionDB, java.sql.*"%>
+<%@page import="ClasesDAO.JugadorDAO"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-    String id = request.getParameter("id");
-    if(id != null){
-        try {
-            Connection conn = ConexionDB.conectar();
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM encuentros WHERE id = ?");
-            ps.setInt(1, Integer.parseInt(id));
-            ps.executeUpdate();
-            conn.close();
-        } catch(Exception e) {}
+    String idStr = request.getParameter("id");
+    if (idStr != null) {
+        new JugadorDAO().eliminar(Integer.parseInt(idStr));
     }
-    response.sendRedirect("gestion_partidos.jsp");
+    response.sendRedirect("gestion_jugadores.jsp");
 %>

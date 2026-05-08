@@ -57,17 +57,25 @@ public class PaisDAO {
         }
     }
 
-    public void eliminar(int id_pais) {
-        String sql = "DELETE FROM pais WHERE id_pais = ?";
+public void eliminar(int id_pais) {
 
-        try (Connection conn = ConexionDB.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    String sql = "DELETE FROM pais WHERE id_pais = ?";
 
-            ps.setInt(1, id_pais);
-            ps.executeUpdate();
+    try (
+        Connection conn = ConexionDB.conectar();
+        PreparedStatement ps = conn.prepareStatement(sql)
+    ) {
 
-        } catch (SQLException ex) {
-            System.out.println("Error al eliminar pais: " + ex.getMessage());
-        }
+        ps.setInt(1, id_pais);
+
+        ps.executeUpdate();
+
+    } catch (SQLException ex) {
+
+        System.out.println("Error al eliminar pais: " + ex.getMessage());
+
     }
+
+}
+
 }

@@ -1,164 +1,197 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Cup 2026 | Dashboard</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --accent: #38bdf8;
-            --accent-hover: #0ea5e9;
-        }
 
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            padding: 20px;
-        }
+<title>World Cup 2026 | Dashboard</title>
 
-        .header {
-            text-align: left;
-            margin-bottom: 40px;
-            border-left: 4px solid var(--accent);
-            padding-left: 20px;
-        }
+<style>
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            letter-spacing: -1px;
-        }
+:root{
+    --bg:#081028;
+    --text:#f8fafc;
+    --muted:#94a3b8;
+    --accent:#38bdf8;
+}
 
-        .header p {
-            color: var(--text-dim);
-            margin: 5px 0 0;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
+body{
+    font-family:system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
+.container{
+    width:92%;
+    max-width:1300px;
+    margin:auto;
+    padding:50px 20px;
+}
 
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
+/* HEADER */
+.header{
+    margin-bottom:40px;
+    border-left:5px solid var(--accent);
+    padding-left:25px;
+}
 
-        .card h3 {
-            margin-top: 0;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.3rem;
-        }
+.header h1{
+    font-size:3.8rem;
+}
 
-        .menu-list {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0 0;
-        }
+.header p{
+    color:var(--muted);
+    margin-top:8px;
+}
 
-        .menu-list li {
-            margin-bottom: 12px;
-        }
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
 
-        .menu-list a {
-            color: var(--text-main);
-            text-decoration: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            transition: background 0.2s;
-        }
+/* CARDS: COLOR BALANCEADO (NI NEGRO NI BLANCO) */
+.card{
+    background:linear-gradient(135deg,#1f2a44,#273449);
+    border-radius:20px;
+    padding:28px;
+    border:1px solid rgba(56,189,248,0.25);
+    box-shadow:0 12px 30px rgba(0,0,0,0.35);
+    transition:0.3s;
+}
 
-        .menu-list a:hover {
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent);
-        }
+.card:hover{
+    transform:translateY(-8px);
+    border-color:var(--accent);
+}
 
-        .menu-list a::after {
-            content: '→';
-            font-size: 1.1rem;
-            opacity: 0.5;
-        }
+/* TITULOS */
+.card h3{
+    margin-bottom:18px;
+    font-size:1.4rem;
+    color:var(--accent);
+}
 
-        .footer-text {
-            text-align: center;
-            margin-top: 50px;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-    </style>
+/* LINKS */
+.menu-list{
+    list-style:none;
+}
+
+.menu-list li{
+    margin-bottom:12px;
+}
+
+.menu-list a{
+    display:flex;
+    justify-content:space-between;
+    padding:14px 16px;
+    background:rgba(255,255,255,0.08);
+    border-radius:12px;
+    text-decoration:none;
+    color:var(--text);
+    transition:0.2s;
+}
+
+.menu-list a:hover{
+    background:rgba(56,189,248,0.2);
+    transform:translateX(6px);
+}
+
+/* FOOTER */
+.footer{
+    margin-top:60px;
+    text-align:center;
+    padding:22px;
+    border-radius:16px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(56,189,248,0.2);
+}
+
+.footer-title{
+    color:var(--accent);
+    font-size:13px;
+    margin-bottom:6px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+.footer-names{
+    font-size:18px;
+    font-weight:bold;
+}
+
+</style>
+
 </head>
+
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>World Cup 2026</h1>
-        <p>Panel de Administración y Logística</p>
+
+<div class="header">
+    <h1>MUNDIAL 2026</h1>
+    <p>Panel de Administración y Logística</p>
+</div>
+
+<!-- MENU -->
+<div class="grid">
+
+    <div class="card">
+        <h3>Catálogos</h3>
+        <ul class="menu-list">
+            <li><a href="gestion_paises.jsp">Países</a></li>
+            <li><a href="gestion_estadios.jsp">Estadios</a></li>
+            <li><a href="gestion_fases.jsp">Fases</a></li>
+            <li><a href="gestion_posiciones.jsp">Posiciones</a></li>
+        </ul>
     </div>
 
-    <div class="grid">
-        <div class="card">
-            <h3>⚽ Gestión de Plantillas</h3>
-            <ul class="menu-list">
-                <li><a href="gestion_equipos.jsp">Selecciones Nacionales</a></li>
-                <li><a href="gestion_jugadores.jsp">Registro de Jugadores</a></li>
-                <li><a href="gestion_grupos.jsp">Fase de Grupos</a></li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>🏟️ Competición y Sedes</h3>
-            <ul class="menu-list">
-                <li><a href="gestion_partidos.jsp">Calendario Oficial</a></li>
-                <li><a href="gestion_estadios.jsp">Infraestructura Sedes</a></li>
-                <li><a href="gestion_eventos.jsp">Cronología de Eventos</a></li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3>🏆 Rendimiento</h3>
-            <ul class="menu-list">
-                <li><a href="gestion_premios.jsp">Calificaciones MVP</a></li>
-                <li><a href="#" style="opacity: 0.5; pointer-events: none;">Estadísticas Generales</a></li>
-            </ul>
-        </div>
+    <div class="card">
+        <h3>Plantillas</h3>
+        <ul class="menu-list">
+            <li><a href="gestion_equipos.jsp">Equipos</a></li>
+            <li><a href="gestion_jugadores.jsp">Jugadores</a></li>
+        </ul>
     </div>
 
-    <p class="footer-text">Sistema de Gestión Deportiva • UMG • 2026</p>
+    <div class="card">
+        <h3>Competición</h3>
+        <ul class="menu-list">
+            <li><a href="gestion_partidos.jsp">Partidos</a></li>
+            <li><a href="gestion_goles.jsp">Goles</a></li>
+            <li><a href="gestion_amonestaciones.jsp">Amonestaciones</a></li>
+            <li><a href="gestion_alineaciones.jsp">Alineaciones</a></li>
+            <li><a href="tabla_posiciones.jsp">Tabla de Posiciones</a></li>
+            <li><a href="simulacion.jsp">Simulación</a></li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+
+    <div class="footer-title">
+        Sistema de Gestión Deportiva - UMG - 2026
+    </div>
+
+    <div class="footer-names">
+        Grupo 1: Keila - Karen - Kimberly
+    </div>
+
+</div>
+
 </div>
 
 </body>
